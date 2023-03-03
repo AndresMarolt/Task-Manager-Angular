@@ -1,18 +1,23 @@
 import express from 'express'
-import { getLists, postList, updateLIst, deleteList, getListTasks, postTask, updateTask, deleteTask, getTasksFromList } from '../controllers/index.js';
+import { getLists, postList, updateLIst, deleteList, getListTasks, postTask, updateTask, deleteTask, getTasksFromList, userSignUp, userLogIn, getAccessToken } from '../controllers/index.js';
+import { verifySession } from '../middleware/auth.js';
+import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get('/lists', getLists);
-router.post('/lists', postList);
-router.patch('/lists/:id', updateLIst);
-router.delete('/lists/:id', deleteList);
+router.get('/lists', authenticate, getLists);
+router.post('/lists', authenticate, postList);
+router.patch('/lists/:id', authenticate, updateLIst);
+router.delete('/lists/:id', authenticate, deleteList);
 
+router.get('/lists/:listId/tasks', authenticate, getListTasks);
+router.post('/lists/:listId/tasks', authenticate, postTask);
+router.patch('/lists/:listId/tasks/:taskId', authenticate, updateTask);
+router.delete('/lists/:listId/tasks/:taskId', authenticate, deleteTask);
+router.get('/lists/:listId/tasks/:taskId', getTasksFromList);
 
-router.get('/lists/:listId/tasks', getListTasks);
-router.post('/lists/:listId/tasks', postTask);
-router.patch('/lists/:listId/tasks/:taskId', updateTask)
-router.delete('/lists/:listId/tasks/:taskId', deleteTask)
-router.get('/lists/:listId/tasks/:taskId', getTasksFromList)
+router.post('/users', userSignUp);
+router.post('/users/login', userLogIn);
+router.get('/users/me/access-token', verifySession, getAccessToken);
 
 export default router;
