@@ -24,8 +24,7 @@ export class LoginPageComponent {
     const {email, password} = formData;
 
     this.authService.login(email, password).subscribe((res) => {
-      console.log(res);
-      this.router.navigate(['/lists']).then(() => window.location.reload());
+      if(res.status === 200) this.router.navigate(['/lists']).then(() => window.location.reload());
     })
   }
 }

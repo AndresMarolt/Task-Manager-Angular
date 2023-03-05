@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Route } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { TaskService } from './task.service';
 import { WebRequestService } from './web-request.service';
 
 @Injectable({
@@ -11,10 +12,11 @@ export class ListService {
   private listsSubject: BehaviorSubject<any> = new BehaviorSubject<any[]>([]);
   public lists$: Observable<any> = this.listsSubject.asObservable();
   
-  constructor(private webReqService: WebRequestService) {
-    this.getLists().subscribe(lists => {
-      this.listsSubject.next(lists)
-    });
+  constructor(private webReqService: WebRequestService, private tasksService: TaskService) {
+    // this.getLists().subscribe(lists => {
+    //   this.listsSubject.next(lists)
+    // });
+    this.getLists2();
   }
 
   getLists() {
@@ -48,6 +50,12 @@ export class ListService {
   }
 
   deleteList(listId: string) {
-    return this.webReqService.delete(`lists/${listId}`)
+    let newList = this.listsSubject.getValue();
+    this.webReqService.delete(`lists/${listId}`).subscribe(_ => {
+      let updatedLists = newList.filter((list: any) => list._id !== listId );
+      this.listsSubject.next(updatedLists);
+    })
+
+    return this.lists$;
   }
 }

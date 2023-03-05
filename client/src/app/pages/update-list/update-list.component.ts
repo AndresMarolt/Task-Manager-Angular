@@ -28,8 +28,6 @@ export class UpdateListComponent {
   updateList(title: string) {
     let {currentListId} = this.data;
     this.listService.updateList(title, currentListId).subscribe((response: any) => {
-      console.log(response);
-      this.listService.getLists();
       this.dialogRef.close();
     });
   }

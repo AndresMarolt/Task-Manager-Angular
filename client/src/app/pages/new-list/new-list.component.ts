@@ -24,7 +24,6 @@ export class NewListComponent {
 
   createNewList(title: string) {
     this.listService.createList(title).subscribe((response: any) => {
-      console.log(response);
       this.dialogRef.close();
     });
   }

@@ -40,6 +40,18 @@ export class AuthService {
     this.router.navigate(['/login'])
   }
 
+  removeSession() {
+    return this.httpClient.delete(`${this.webService.ROOT_URL}/users/session`, {
+      headers: {
+        '_id': this.getUserId()!,
+        'x-refresh-token': this.getRefreshToken()!
+      }
+    }).subscribe(() => {
+      this.deleteSession();
+      this.router.navigate(["/login"]);
+    })
+  }
+
   getAccessToken(): any {
     return localStorage.getItem('x-access-token');
   }

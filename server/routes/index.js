@@ -1,5 +1,5 @@
 import express from 'express'
-import { getLists, postList, updateLIst, deleteList, getListTasks, postTask, updateTask, deleteTask, getTasksFromList, userSignUp, userLogIn, getAccessToken } from '../controllers/index.js';
+import { getLists, postList, updateLIst, deleteList, getListTasks, postTask, updateTask, deleteTask, getTasksFromList, userSignUp, userLogIn, getAccessToken, deleteSession } from '../controllers/index.js';
 import { verifySession } from '../middleware/auth.js';
 import { authenticate } from '../middleware/auth.js';
 
@@ -18,6 +18,7 @@ router.get('/lists/:listId/tasks/:taskId', getTasksFromList);
 
 router.post('/users', userSignUp);
 router.post('/users/login', userLogIn);
+router.delete('/users/session', verifySession, deleteSession);
 router.get('/users/me/access-token', verifySession, getAccessToken);
 
 export default router;

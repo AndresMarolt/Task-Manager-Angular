@@ -6,6 +6,8 @@ button {
     }
 }
 
-.dialog_container {
-    width: 80vh;
+@media(min-width: 576px) {
+    .dialog_container {
+        width: 80vh;
+    }
 }

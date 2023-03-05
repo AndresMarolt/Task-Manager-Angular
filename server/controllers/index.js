@@ -47,8 +47,9 @@ export const deleteList = (req, res) => {
 
         // DELETE ALL TASKS FROM THE DELETED LIST
         Task.deleteMany({
-            _listId: removedListDoc._id
-        }).then(() => {
+            listId: removedListDoc._id
+        }).then((t) => {
+            console.log(t);
             console.log("Tasks from ", removedListDoc._id, " were deleted!");
         })
     }).catch(err => {
@@ -222,10 +223,20 @@ export const getAccessToken = (req, res) => {
     })
 }
 
+export const deleteSession = (req, res) => {
+    let userId = req.user_id;
+    let refreshToken = req.refreshToken;
 
-// HELPER METHODS
-// const deleteTasksFromList = (_listId) => {
-//     Task.deleteMany({
-//         _listId
-//     })
-// }
+    User.findOneAndUpdate({
+        _id: userId
+    },{
+        $pull: {
+            sessions: {
+                token: refreshToken
+            }
+        }
+    }).then(() => {
+        console.log("REMOVED SESSION");
+        res.send();
+    })
+}
